@@ -9,6 +9,8 @@ Nodurl supports redirects and file downloads (aKa url shortener and file-sharing
 
 ### Installation
 
+* Install Nodejs and Redis
+* git clone https://github.com/ptisp/nodurl
 * npm install
 * npm start
 
