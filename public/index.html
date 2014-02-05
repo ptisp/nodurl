@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/nodurl.css">
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="js/nodurl.js"></script>
+    <title>Nodurl</title>
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Nodurl</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="form">
+            <button class="btn btn-success btn_create">Create urly</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="creatediv" style="display:none">
+        <h1>Create a new urly</h1>
+        <form role="form" method="POST" action="/create" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Tag</label>
+            <input type="text" class="form-control" id="field_urly" placeholder="Leave empty for random" name="urly">
+          </div>
+
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#redirectt" data-toggle="tab">Redirect</a></li>
+            <li><a href="#filet" data-toggle="tab">File</a></li>
+          </ul>
+
+          <div class="tab-content" style="margin-top: 10px">
+            <div class="tab-pane active" id="redirectt">
+              <div class="form-group">
+                <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Destination URL" name="destination">
+              </div>
+            </div>
+            <div class="tab-pane" id="filet">
+              <div class="form-group">
+                <input type="file" id="exampleInputFile" name="file">
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success btn_created">Create</button>
+          <button class="btn btn-warning btn_cancel">Cancel</button>
+        </form>
+      </div>
+
+      <table id="main_table" class="table">
+        <thead>
+          <tr>
+            <th>Urly</th>
+            <th>Tag</th>
+            <th>Target</th>
+            <th>Type</th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
+
+    </div>
+  </body>
+</html>
