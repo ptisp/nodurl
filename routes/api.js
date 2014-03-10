@@ -15,6 +15,8 @@ exports.create = function (req, res) {
 
   if(urly.length === 0) urly = makeid();
 
+  urly = urly.replace(' ','');
+
   if(!urly || (!destination && !file)) res.json({'result': false});
 
   if(file && file.name.length > 1) {
