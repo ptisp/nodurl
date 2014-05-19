@@ -30,7 +30,7 @@ $(document).ready(function() {
       data: {},
       success: function(data) {
         if(data.result === true) {
-          $(elem).parent().remove();
+          $(elem).parent().parent().remove();    
         }
       },
       dataType: 'json',
