@@ -30,7 +30,7 @@ exports.create = function(req, res) {
       });
     }
 
-    redis_client.hset('files', urly, filename, function(err) {
+    redis_client.hset('files', urly, req.body.path, function(err) {
       if (err) return res.json({
         'result': false
       });
