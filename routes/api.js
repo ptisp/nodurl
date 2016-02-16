@@ -23,17 +23,20 @@ function upsert(urly, destination, type, callback) {
 exports.create = function(req, res) {
   var urly = req.body.urly;
   var destination = req.body.destination;
-  var file;
+  var file = req.file;
+
   if (req.files) file = req.files.file;
 
   if (urly.length === 0) urly = makeid();
 
   urly = urly.replace(' ', '');
 
-  if (!urly || (!destination && !file)) res.json({
-    'result': false,
-    'message': 'params missing'
-  });
+  if (!urly || (!destination && !file)) {
+    return res.json({
+      'result': false,
+      'message': 'params missing'
+    });
+  }
 
   if (req.body.path) {
     var rootDirectory = path.resolve(__dirname + '/../files/');
