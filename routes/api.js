@@ -31,7 +31,7 @@ exports.create = function(req, res) {
 
   urly = urly.replace(' ', '');
 
-  if (!urly || (!destination && !file)) {
+  if (!urly || (!destination && !file && !req.body.path)) {
     return res.json({
       'result': false,
       'message': 'params missing'
