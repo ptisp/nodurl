@@ -56,9 +56,9 @@ exports.create = function(req, res) {
       }
       res.redirect('/olympus');
     });
-  } else if (file && file.name.length > 1) {
+  } else if (file && file.originalname.length > 1) {
     var tempPath = file.path;
-    var targetPath = path.resolve(__dirname + '/../files/' + file.name.toLowerCase());
+    var targetPath = path.resolve(__dirname + '/../files/' + file.originalname.toLowerCase());
 
     fs.rename(tempPath, targetPath, function(err) {
       if (err) {
@@ -68,7 +68,7 @@ exports.create = function(req, res) {
         });
       }
 
-      upsert(urly, file.name.toLowerCase(), 'files', function(err, result) {
+      upsert(urly, file.originalname.toLowerCase(), 'files', function(err, result) {
         if (err) {
           console.log(err);
           return res.json({
