@@ -1,29 +1,40 @@
 require('colors');
 
 var express = require('express'),
-  api = require('./routes/api');
+  bodyParser = require('body-parser'),
+  basicAuth = require('basic-auth'),
+  api = require('./routes/api'),
+  multer = require('multer');
 
+var upload = multer({
+  dest: __dirname + '/tmp'
+});
 var app = express();
 
-app.configure(function() {
-  this.use(express.errorHandler({
-    dumpException: true,
-    showStack: true
-  }));
-});
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
+app.use(bodyParser.json());
+app.use('/' + (process.env.NODURL_ADMINTAG || 'olympus'), express.static(__dirname + '/public'));
 
-app.configure(function() {
-  this.use(express.bodyParser({
-    uploadDir: __dirname + '/tmp'
-  }));
-  this.use('/' + (process.env.NODURL_ADMINTAG || 'olympus'), express.static(__dirname + '/public'));
-  this.use(app.router);
-});
+var auth = function(req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  }
 
-var auth = express.basicAuth(function(user, pass, callback) {
-  var result = (user === process.env.NODURL_USER && pass === process.env.NODURL_PASSWORD);
-  callback(null, result);
-});
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  }
+
+  if (user.name === process.env.NODURL_USER && user.pass === process.env.NODURL_PASSWORD) {
+    return next();
+  } else {
+    return unauthorized(res);
+  }
+};
 
 app.get('/', function(req, res) {
   res.redirect(process.env.NODURL_HOME);
@@ -31,8 +42,8 @@ app.get('/', function(req, res) {
 
 app.get('/urls', auth, api.urls);
 app.get('/:urly', api.url);
-app.del('/remove/:urly', auth, api.remove);
-app.post('/create', auth, api.create);
+app.delete('/remove/:urly', auth, api.remove);
+app.post('/create', auth, upload.single('file'), api.create);
 
 var port = process.env.NODURL_PORT || 80;
 console.log('Listening on %d'.green, port);
