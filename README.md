@@ -1,6 +1,6 @@
 nodurl
 ==================
-Quick and dirty Nodejs and Redis powered URL shortener and file-sharing app. Input sanization missing.
+Quick and dirty Nodejs and MongoDB powered URL shortener and file-sharing app.
 
 ### Instructions
 http://127.0.0.1/olympus - Administration area (default is olympus, customizable by NODURL_ADMINTAG)
@@ -9,7 +9,7 @@ Nodurl supports redirects and file downloads (aKa url shortener and file-sharing
 
 ### Installation
 
-* Install Nodejs and Redis
+* Install Nodejs and MongoDB
 * git clone https://github.com/ptisp/nodurl
 * npm install
 * npm start
@@ -19,6 +19,6 @@ Nodurl supports redirects and file downloads (aKa url shortener and file-sharing
 * NODURL_PASSWORD - admin password
 * NODURL_HOME - where to redirect when accessing /
 * NODURL_PORT - listening port
-* NODURL_REDIS_IP - redis daemon ip address
-* NODURL_REDIS_PORT - redis daemon port
 * NODURL_ADMINTAG - administration area tag, default is 'olympus'
+* MONGO_HOST - MongoDB host
+* MONGO_DB - MongoDB database
