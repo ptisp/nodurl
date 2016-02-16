@@ -31,7 +31,8 @@ exports.create = function(req, res) {
   urly = urly.replace(' ', '');
 
   if (!urly || (!destination && !file)) res.json({
-    'result': false
+    'result': false,
+    'message': 'params missing'
   });
 
   if (req.body.path) {
@@ -44,9 +45,12 @@ exports.create = function(req, res) {
     }
 
     upsert(urly, req.body.path, 'files', function(err, result) {
-      if (err) return res.json({
-        'result': false
-      });
+      if (err) {
+        console.log(err);
+        return res.json({
+          'result': false
+        });
+      }
       res.redirect('/olympus');
     });
   } else if (file && file.name.length > 1) {
@@ -54,22 +58,31 @@ exports.create = function(req, res) {
     var targetPath = path.resolve(__dirname + '/../files/' + file.name.toLowerCase());
 
     fs.rename(tempPath, targetPath, function(err) {
-      if (err) return res.json({
-        'result': false
-      });
-
-      upsert(urly, file.name.toLowerCase(), 'files', function(err, result) {
-        if (err) return res.json({
+      if (err) {
+        console.log(err);
+        return res.json({
           'result': false
         });
+      }
+
+      upsert(urly, file.name.toLowerCase(), 'files', function(err, result) {
+        if (err) {
+          console.log(err);
+          return res.json({
+            'result': false
+          });
+        }
         res.redirect('/olympus');
       });
     });
   } else {
     upsert(urly, destination, 'shorts', function(err, result) {
-      if (err) return res.json({
-        'result': false
-      });
+      if (err) {
+        console.log(err);
+        return res.json({
+          'result': false
+        });
+      }
       res.redirect('/olympus');
     });
   }
