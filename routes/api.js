@@ -94,6 +94,10 @@ exports.create = function(req, res) {
 exports.url = function(req, res) {
   var urly = req.params.urly;
 
+  console.log('----------------');
+  console.log(new Date());
+  console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+
   vendors.mongo.collection('urlys').findOne({
     'urly': urly
   }, function(err, doc) {
