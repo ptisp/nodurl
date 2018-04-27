@@ -4,13 +4,14 @@ var fs = require('fs'),
   path = require('path'),
   vendors = require('../vendors');
 
-function upsert(urly, destination, type, callback) {
+function upsert(options, callback) {
   vendors.mongo.collection('urlys').updateOne({
-    'urly': urly
+    'urly': options.urly
   }, {
     $set: {
-      'destination': destination,
-      'type': type
+      'destination': options.destination,
+      'type': options.type,
+      'cors': options.cors
     }
   }, {
     upsert: true,
@@ -22,6 +23,7 @@ function upsert(urly, destination, type, callback) {
 
 exports.create = function(req, res) {
   var urly = req.body.urly;
+  var cors = req.body.cors;
   var destination = req.body.destination;
   var file = req.file;
 
@@ -47,7 +49,7 @@ exports.create = function(req, res) {
       });
     }
 
-    upsert(urly, req.body.path, 'files', function(err, result) {
+    upsert({'urly': urly, 'destination': req.body.path, 'type': 'files', 'cors': cors}, function(err, result) {
       if (err) {
         console.log(err);
         return res.json({
@@ -68,7 +70,7 @@ exports.create = function(req, res) {
         });
       }
 
-      upsert(urly, file.originalname.toLowerCase(), 'files', function(err, result) {
+      upsert({'urly': urly, 'destination': file.originalname.toLowerCase(), 'type': 'files', 'cors': cors}, function(err, result) {
         if (err) {
           console.log(err);
           return res.json({
@@ -79,7 +81,7 @@ exports.create = function(req, res) {
       });
     });
   } else {
-    upsert(urly, destination, 'shorts', function(err, result) {
+    upsert({'urly': urly, 'destination': destination, 'type': 'shorts', 'cors': cors}, function(err, result) {
       if (err) {
         console.log(err);
         return res.json({
@@ -143,6 +145,11 @@ function sendFile(doc, req, res) {
 
   if (fs.existsSync(filePath)) {
     var file = fs.statSync(filePath);
+
+    if (doc.cors === true) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    }
 
     res.writeHead(200, {
       'Content-disposition': 'attachment; filename=' + filename,
