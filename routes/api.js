@@ -146,7 +146,7 @@ function sendFile(doc, req, res) {
   if (fs.existsSync(filePath)) {
     var file = fs.statSync(filePath);
 
-    if (doc.cors == true) {
+    if (doc.cors == 'true') {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "X-Requested-With");
     }
